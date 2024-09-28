@@ -20,7 +20,7 @@ write_words(100, 'example4.txt')
 
 time_end = datetime.now()
 time_res = time_end - time_start
-print(time_res)
+print(f'Работа потоков {time_res}')
 
 THE_ARGS = ((10, 'example5.txt'), (30, 'example6.txt'), (200, 'example7.txt'), (100, 'example8.txt'))
 
@@ -43,4 +43,4 @@ thr_fourth.join()
 
 time_end = datetime.now()
 time_res = time_end - time_start
-print(time_res)
+print(f'Работа потоков {time_res}')
