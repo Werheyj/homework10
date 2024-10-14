@@ -16,7 +16,7 @@ class Guest(Thread):
         self.name = name
 
     def run(self):
-        wait = randint(3, 5)
+        wait = randint(3, 10)
         sleep(wait)
 
 
@@ -27,15 +27,17 @@ class Cafe:
 
     def guest_arrival(self, *guests):
         for guest in guests:
+            assigned = False
             for table in self.tables:
                 if table.guest is None:
                     table.guest = guest
                     guest.start()
                     print(f'{guest.name} сел(-а) за стол номер {table.number}')
+                    assigned = True
                     break
-                else:
-                    self.queue.put(guest)
-                    print(f'{guest.name} в очереди')
+            if not assigned:
+                self.queue.put(guest)
+                print(f'{guest.name} в очереди')
 
     def discuss_guests(self):
         while not self.queue.empty() or any(table.guest is not None for table in self.tables):
@@ -44,6 +46,7 @@ class Cafe:
                     print(f'{table.guest.name} покушал(-а) и ушёл(ушла)')
                     print(f'Стол номер {table.number} свободен')
                     table.guest = None
+
                 if table.guest is None and not self.queue.empty():
                     next_guest = self.queue.get()
                     table.guest = next_guest
@@ -57,7 +60,7 @@ tables = [Table(number) for number in range(1, 6)]
 guests_names = [
     'Maria', 'Oleg', 'Vakhtang', 'Sergey', 'Darya', 'Arman',
     'Vitoria', 'Nikita', 'Galina', 'Pavel', 'Ilya', 'Alexandra'
-    ]
+]
 # Создание гостей
 guests = [Guest(name) for name in guests_names]
 # Заполнение кафе столами
